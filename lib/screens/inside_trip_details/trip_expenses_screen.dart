@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:journey/db/functions/expenses_db.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
@@ -124,21 +126,35 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isEditing = false;
-                                            });
+                                      PopupMenuButton(
+                                        color: Colors.indigo[50],
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                              child: ListTile(
+                                            leading: const Icon(Icons.edit),
+                                            title: const Text('Edit'),
+                                            onTap: () {
+                                              setState(() {
+                                                isEditing = false;
+                                              });
 
-                                            editingExpenses(context, data);
-                                          },
-                                          icon: const Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {
-                                            deletingExpenses(
-                                                context, data, data.id);
-                                          },
-                                          icon: const Icon(Icons.delete)),
+                                              editingExpenses(context, data);
+                                              Navigator.of(context).pop();
+                                            },
+                                          )),
+                                          PopupMenuItem(
+                                              child: ListTile(
+                                            leading: const Icon(Icons.delete),
+                                            title: const Text('Delete'),
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+
+                                              deletingExpenses(
+                                                  context, data, data.id);
+                                            },
+                                          ))
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),

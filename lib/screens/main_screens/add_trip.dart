@@ -21,7 +21,7 @@ class AddTrip extends StatefulWidget {
 
 
 class _AddTripState extends State<AddTrip> {
-  final task_formkey = GlobalKey<FormState>();
+  final taskFormKey = GlobalKey<FormState>();
   late int editKey;
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
@@ -53,7 +53,7 @@ class _AddTripState extends State<AddTrip> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Form(
-              key: task_formkey,
+              key: taskFormKey,
               child: Column(
                 children: [
                   const SizedBox(
@@ -435,7 +435,7 @@ class _AddTripState extends State<AddTrip> {
       return;
     }
 
-    if (task_formkey.currentState!.validate()) {
+    if (taskFormKey.currentState!.validate()) {
      await addingTripToDb(TripModel(
         place: place,
         startDate: startDate!,

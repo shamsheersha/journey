@@ -22,7 +22,7 @@ class EditTrip extends StatefulWidget {
 
 
 class _EditTripState extends State<EditTrip> {
- final task_formkey = GlobalKey<FormState>();
+ final taskFormKeyEdit = GlobalKey<FormState>();
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
   final editPlaceController = TextEditingController();
@@ -80,7 +80,7 @@ class _EditTripState extends State<EditTrip> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Form(
-              key: task_formkey,
+              key: taskFormKeyEdit,
               child: Column(
                 children: [
                   const SizedBox(

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:journey/db/functions/db_functions.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
@@ -7,8 +8,8 @@ import 'package:journey/db/model/data_model.dart';
 import 'package:journey/fonts/fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
- final UserModel usermodel;
- const ProfileScreen({required this.usermodel, super.key});
+  final UserModel usermodel;
+  const ProfileScreen({required this.usermodel, super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -25,11 +26,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     usermodel = widget.usermodel;
-    _image=usermodel.image;
+    _image = usermodel.image;
     calculateTripCounts();
   }
 
-  
   final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Stack(
                         children: [
-                          data.image!= null
+                          data.image != null
                               ? GestureDetector(
                                   onTap: () {
                                     showDialog(
@@ -120,7 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Divider(color: Colors.black,),
+                      const Divider(
+                        color: Colors.black,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -144,7 +146,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      const Divider(color: Colors.black,),
+                      const Divider(
+                        color: Colors.black,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -184,7 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     '$yetToCompleteCount',
                                     style: bold,
                                   ),
-                                  Text('Yet To Complete', style: inriaGoogleFont4)
+                                  Text('Yet To Complete',
+                                      style: inriaGoogleFont4)
                                 ],
                               ),
                             ),
@@ -206,6 +211,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ]),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                      GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              height: 30,
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Text(
+                                'Privacy Policy',
+                                style: bold1,
+                              ))),
+                      const Divider(
+                        color: Colors.black,
+                      ),
                     ],
                   );
                 },
@@ -233,63 +259,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> editUserName(BuildContext context) async {
-
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(
-          'Change Username',
-          style: inriaGoogleFont3,
-        ),
-        content: TextField(
-          controller: editUserNameController,
-          decoration: const InputDecoration(
-            hintText: 'Edit Username',
-            border: OutlineInputBorder(),
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Change Username',
+            style: inriaGoogleFont3,
           ),
-        ),
-        actions: [
-          MaterialButton(
-            onPressed: () async {
-              final newUsername = editUserNameController.text.trim();
-              if (newUsername.isNotEmpty && newUsername != usermodel.username) {
-                await changeUsername(newUsername);
-              }
-              
-              Navigator.pop(context);
-            },
-            color: Colors.indigo[300],
-            textColor: Colors.white,
-            child: Text(
-              'Save',
-              style: inriaGoogleFont,
+          content: TextField(
+            controller: editUserNameController,
+            decoration: const InputDecoration(
+              hintText: 'Edit Username',
+              border: OutlineInputBorder(),
             ),
           ),
-        ],
-      );
-    },
-  );
- }
+          actions: [
+            MaterialButton(
+              onPressed: () async {
+                final newUsername = editUserNameController.text.trim();
+                if (newUsername.isNotEmpty &&
+                    newUsername != usermodel.username) {
+                  await changeUsername(newUsername);
+                }
 
- Future<void> changeUsername(String newUsername) async {
-  final usermodelEdited = UserModel(
-    username: newUsername,
-    password: usermodel.password,
-    confirmPassword: usermodel.confirmPassword,
-    image: _image,
-  );
-  await toUpdateDetails(usermodelEdited, usermodel.key);
-  userModelNotifier.notifyListeners();
+                Navigator.pop(context);
+              },
+              color: Colors.indigo[300],
+              textColor: Colors.white,
+              child: Text(
+                'Save',
+                style: inriaGoogleFont,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-   calculateTripCounts() {
+  Future<void> changeUsername(String newUsername) async {
+    final usermodelEdited = UserModel(
+      username: newUsername,
+      password: usermodel.password,
+      confirmPassword: usermodel.confirmPassword,
+      image: _image,
+    );
+    await toUpdateDetails(usermodelEdited, usermodel.key);
+    userModelNotifier.notifyListeners();
+  }
+
+  calculateTripCounts() {
     final allTrips = tripModelNotifier.value;
     final now = DateTime.now();
-    
-    inProgressCount = allTrips.where((trip) => trip.startDate.isBefore(now) && trip.endDate.isAfter(now)).toList().length;
-    yetToCompleteCount = allTrips.where((trip) => trip.startDate.isAfter(now)).toList().length;
-    completedCount = allTrips.where((trip) => trip.endDate.isBefore(now)).toList().length;
+
+    inProgressCount = allTrips
+        .where(
+            (trip) => trip.startDate.isBefore(now) && trip.endDate.isAfter(now))
+        .toList()
+        .length;
+    yetToCompleteCount =
+        allTrips.where((trip) => trip.startDate.isAfter(now)).toList().length;
+    completedCount =
+        allTrips.where((trip) => trip.endDate.isBefore(now)).toList().length;
   }
-  
 }

@@ -115,7 +115,7 @@ class _TripDetailsState extends State<TripDetails> {
                       children: [
                         const Text('Budget'),
                         const Text('---'),
-                        Text('${tripModel.budget}')
+                        Text('₹${tripModel.budget}')
                       ],
                     ),
                     const SizedBox(
