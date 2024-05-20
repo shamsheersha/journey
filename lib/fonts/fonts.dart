@@ -20,3 +20,6 @@ var floatingActionButtonColor = GoogleFonts.inriaSans(textStyle:const TextStyle(
 var bold = const TextStyle(fontSize: 30,fontWeight: FontWeight.bold);
 var bold1 =  GoogleFonts.inriaSans(textStyle:const TextStyle(color: Colors.black,fontSize: 25));
 var bold2 =  GoogleFonts.inriaSans(textStyle:const TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.w500),);
+
+
+var privacytitles =   const TextStyle(fontSize: 27,fontWeight: FontWeight.w500);

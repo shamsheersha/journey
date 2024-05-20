@@ -3,14 +3,27 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:journey/db/model/journey_model.dart';
 
 ValueNotifier<List<TripModel>> tripModelNotifier = ValueNotifier([]);
- late int currentTripKey ;
+late int currentTripKey;
 Future<void> addingTripToDb(TripModel value) async {
   final tripDb = await Hive.openBox<TripModel>('trip_db');
   final key = await tripDb.add(value);
-  currentTripKey = key;
   tripModelNotifier.value.add(value);
-
   tripModelNotifier.notifyListeners();
+
+  await tripDb.close();
+}
+
+Future<void> updateNote(int key, String note) async {
+  final tripDb = await Hive.openBox<TripModel>('trip_db');
+  final tripKeyFromDb = tripDb.get(key);
+
+  
+    tripKeyFromDb!.notes = note;
+    await tripDb.put(key, tripKeyFromDb);
+
+    tripModelNotifier.value = tripDb.values.toList();
+    tripModelNotifier.notifyListeners();
+  
 
   await tripDb.close();
 }
@@ -20,6 +33,7 @@ Future<void> getAllTrip() async {
   tripModelNotifier.value.clear();
   tripModelNotifier.value.addAll(tripDb.values);
   tripModelNotifier.notifyListeners();
+
   await tripDb.close();
 }
 

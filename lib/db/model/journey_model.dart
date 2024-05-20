@@ -16,13 +16,16 @@ class TripModel extends HiveObject{
   final String budget;
 
   @HiveField(4)
-  final String notes;
+    String notes;
 
   @HiveField(5)
   final String travelMethod;
   
   @HiveField(6)
   final List<String> images;
+
+  @HiveField(7)
+   final Map<String, bool>? checkboxes; 
 
   TripModel({
     required this.place,
@@ -32,6 +35,6 @@ class TripModel extends HiveObject{
     required this.notes ,
     required this.travelMethod,
     required this.images,
-     
+     this.checkboxes, 
     });
 }

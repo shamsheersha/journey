@@ -31,6 +31,7 @@ class _TripDetailsState extends State<TripDetails> {
     super.initState();
 
     tripModel = widget.tripModel;
+    
   }
 
   @override
@@ -54,11 +55,11 @@ class _TripDetailsState extends State<TripDetails> {
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30))),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(200),
+          preferredSize: const Size.fromHeight(210),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Container(
-              height: 180,
+              height: 190,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
@@ -147,7 +148,7 @@ class _TripDetailsState extends State<TripDetails> {
             tripModel: tripModel,
             tripModelNotifier: tripModelNotifier,
           ),
-          const Notes(),
+           Notes(tripModel: tripModel,),
           const ChecklistScreen(),
         ],
       ),

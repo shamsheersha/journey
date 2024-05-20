@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:journey/db/functions/db_functions.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
 import 'package:journey/db/model/data_model.dart';
 import 'package:journey/fonts/fonts.dart';
+import 'package:journey/screens/privacy_policy/privacy_policy.dart';
+import 'package:journey/screens/terms_and_conditions/terms_and_conditions.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel usermodel;
@@ -218,15 +220,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: Colors.black,
                       ),
                       GestureDetector(
-                          onTap: () {},
-                          child: Container(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const PrivacyPolicy()));
+                          },
+                          child: SizedBox(
                               height: 30,
                               width: double.infinity,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                              ),
+                              
                               child: Text(
                                 'Privacy Policy',
+                                style: bold1,
+                              ))),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                      
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const TermsAndConditions()));
+                          },
+                          child: SizedBox(
+                              height: 30,
+                              width: double.infinity,
+                              
+                              child: Text(
+                                'Terms and Conditions',
                                 style: bold1,
                               ))),
                       const Divider(
@@ -298,7 +316,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Future<void> changeUsername(String newUsername) async {
+  Future<void> changeUsername(String newUsername) async {       
+    
     final usermodelEdited = UserModel(
       username: newUsername,
       password: usermodel.password,

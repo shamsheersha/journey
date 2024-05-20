@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,21 +7,17 @@ import 'package:journey/db/functions/journey_db_functions.dart';
 import 'package:journey/db/model/journey_model.dart';
 import 'package:journey/fonts/Fonts.dart';
 
-
-
-
 class EditTrip extends StatefulWidget {
   final TripModel tripModel;
-  
+
   const EditTrip({super.key, required this.tripModel});
 
   @override
   State<EditTrip> createState() => _EditTripState();
 }
 
-
 class _EditTripState extends State<EditTrip> {
- final taskFormKeyEdit = GlobalKey<FormState>();
+  final taskFormKeyEdit = GlobalKey<FormState>();
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
   final editPlaceController = TextEditingController();
@@ -39,28 +34,23 @@ class _EditTripState extends State<EditTrip> {
 
   @override
   void initState() {
-
     super.initState();
     tripModel = widget.tripModel;
     editPlaceController.text = tripModel.place;
-    startdate=tripModel.startDate;
-    enddate=tripModel.endDate;
-    editStartingDateController.text = DateFormat('dd-MM-yyyy').format(tripModel.startDate);
-    editEndingDateController.text = DateFormat('dd-MM-yyyy').format(tripModel.endDate);
+    startdate = tripModel.startDate;
+    enddate = tripModel.endDate;
+    editStartingDateController.text =
+        DateFormat('dd-MM-yyyy').format(tripModel.startDate);
+    editEndingDateController.text =
+        DateFormat('dd-MM-yyyy').format(tripModel.endDate);
     editBudgetController.text = tripModel.budget;
     editNoteController.text = tripModel.notes;
-    if(tripModel.travelMethod=='Flight')
-    {
-      isFlightSelected=true;
-    }
-    else if(tripModel.travelMethod=='Car')
-    {
-      isCarSelected=true;
-    }
-    else 
-    {
-      isTrainSelected=true;
-      
+    if (tripModel.travelMethod == 'Flight') {
+      isFlightSelected = true;
+    } else if (tripModel.travelMethod == 'Car') {
+      isCarSelected = true;
+    } else {
+      isTrainSelected = true;
     }
   }
 
@@ -413,6 +403,7 @@ class _EditTripState extends State<EditTrip> {
       ),
     );
   }
+
   Future<void> pickImage() async {
     final List<XFile> image =
         await ImagePicker().pickMultiImage(imageQuality: 50);
@@ -420,10 +411,9 @@ class _EditTripState extends State<EditTrip> {
     if (image.isNotEmpty) {
       setState(() {
         selectedImages.addAll(image);
-       
       });
     }
-  }  
+  }
 
   Future saveTaskDetails(context) async {
     final place = editPlaceController.text.trim();
@@ -441,18 +431,14 @@ class _EditTripState extends State<EditTrip> {
       travelMethod = 'Car';
     }
 
-
-
     if (!isFlightSelected && !isTrainSelected && !isCarSelected) {
       ScaffoldMessenger.of(context).showSnackBar(
-
         const SnackBar(content: Text('Please select a travel mode')),
       );
       return;
     }
 
-    
-      final editTripDetails = TripModel(
+    final editTripDetails = TripModel(
       place: place,
       startDate: startDate!,
       endDate: endDate!,
@@ -460,13 +446,11 @@ class _EditTripState extends State<EditTrip> {
       notes: notes,
       travelMethod: travelMethod,
       images: selectedImages.map((image) => image.path).toList(),
-      );
+    );
 
-      await toUpdateTrip(editTripDetails, tripModel.key);
-      tripModelNotifier.notifyListeners();
-    
-      Navigator.of(context).pop();
-    }
+    await toUpdateTrip(editTripDetails, tripModel.key);
+    tripModelNotifier.notifyListeners();
+
+    Navigator.of(context).pop();
+  }
 }
-
-

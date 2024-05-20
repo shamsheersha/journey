@@ -24,13 +24,14 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       notes: fields[4] as String,
       travelMethod: fields[5] as String,
       images: (fields[6] as List).cast<String>(),
+      checkboxes: (fields[7] as Map?)?.cast<String, bool>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, TripModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.place)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       ..writeByte(5)
       ..write(obj.travelMethod)
       ..writeByte(6)
-      ..write(obj.images);
+      ..write(obj.images)
+      ..writeByte(7)
+      ..write(obj.checkboxes);
   }
 
   @override
