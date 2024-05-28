@@ -43,11 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
   if(logged)
   {
     await getUserDetails();
-    await getAllTrip();
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>   HomeScreen(tripModelNotifier: tripModelNotifier,)));
+    await TripModelFunctions().getAllTrip().then((value) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>   HomeScreen(tripModelNotifier: tripModelNotifier,)));
+
+    });
+
   }
   else {
+
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> const OnBoardPageOne()));
   }

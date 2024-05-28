@@ -7,10 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
 import 'package:journey/db/model/journey_model.dart';
 import 'package:journey/fonts/Fonts.dart';
+import 'package:journey/screens/main_screens/add_trip/delete_image_while_adding.dart';
 import 'package:journey/screens/main_screens/home_screen.dart';
-
-
-
 
 class AddTrip extends StatefulWidget {
   const AddTrip({super.key});
@@ -18,7 +16,6 @@ class AddTrip extends StatefulWidget {
   @override
   State<AddTrip> createState() => _AddTripState();
 }
-
 
 class _AddTripState extends State<AddTrip> {
   final taskFormKey = GlobalKey<FormState>();
@@ -35,7 +32,7 @@ class _AddTripState extends State<AddTrip> {
   bool isTrainSelected = false;
   bool isCarSelected = false;
 
-  List<XFile> selectedImages = [];
+  List<File> selectedImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +67,8 @@ class _AddTripState extends State<AddTrip> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: placeController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final finalValue = value?.trim();
+                      if (finalValue == null || finalValue.isEmpty) {
                         return 'Enter Destination';
                       } else {
                         return null;
@@ -97,7 +95,8 @@ class _AddTripState extends State<AddTrip> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: startingDateController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final finalValue = value?.trim();
+                      if (finalValue == null || finalValue.isEmpty) {
                         return 'Enter Starting Date';
                       } else {
                         return null;
@@ -120,7 +119,7 @@ class _AddTripState extends State<AddTrip> {
                       startdate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
 
                       if (startdate != null) {
@@ -138,7 +137,8 @@ class _AddTripState extends State<AddTrip> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: endingDateController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final finalValue = value?.trim();
+                      if (finalValue == null || finalValue.isEmpty) {
                         return 'Enter Ending Date';
                       } else {
                         return null;
@@ -161,7 +161,7 @@ class _AddTripState extends State<AddTrip> {
                       enddate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101));
 
                       if (enddate != null) {
@@ -180,8 +180,9 @@ class _AddTripState extends State<AddTrip> {
                     controller: budgetController,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter Ending Date';
+                      final finalValue = value?.trim();
+                      if (finalValue == null || finalValue.isEmpty) {
+                        return 'Enter Budget';
                       } else {
                         return null;
                       }
@@ -207,7 +208,8 @@ class _AddTripState extends State<AddTrip> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: noteController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      final finalValue = value?.trim();
+                      if (finalValue == null || finalValue.isEmpty) {
                         return 'Enter Notes';
                       } else {
                         return null;
@@ -342,7 +344,6 @@ class _AddTripState extends State<AddTrip> {
                             'Add Images',
                             style: inriaGoogleFont4,
                           )),
-                          
                     ],
                   ),
                   const SizedBox(
@@ -360,8 +361,11 @@ class _AddTripState extends State<AddTrip> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {},
+                          onLongPress: (){
+                            DeleteImage.deleteImageWhileAddingTrip(context, index,selectedImages, onImageDeleted);
+                          },
                           child: Image.file(
-                            File(selectedImages[index].path),
+                            selectedImages[index],
                             fit: BoxFit.cover,
                           ),
                         );
@@ -387,17 +391,17 @@ class _AddTripState extends State<AddTrip> {
       ),
     );
   }
-  Future<void> pickImage() async {
-    final List<XFile> image =
-        await ImagePicker().pickMultiImage(imageQuality: 50);
 
-    if (image.isNotEmpty) {
+  Future<void> pickImage() async {
+    final List<XFile> images = await ImagePicker().pickMultiImage(imageQuality: 50);
+
+    if (images.isNotEmpty) {
       setState(() {
-        selectedImages.addAll(image);
-       
+        
+        selectedImages.addAll(images.map((xfile) => File(xfile.path)).toList());
       });
     }
-  }  
+  }
 
   Future saveTaskDetails() async {
     final place = placeController.text.trim();
@@ -415,19 +419,6 @@ class _AddTripState extends State<AddTrip> {
       travelMethod = 'Car';
     }
 
-    // if (startDate != null && startDate.isBefore(DateTime.now())) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Starting date cannot be in the past')),
-    //   );
-    //   return;
-    // }
-    // if(endDate != null && endDate.isBefore(DateTime.now())){
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Ending date must be after starting date'))
-    //   );
-    //   return;
-    // }
-
     if (!isFlightSelected && !isTrainSelected && !isCarSelected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a travel mode')),
@@ -436,7 +427,7 @@ class _AddTripState extends State<AddTrip> {
     }
 
     if (taskFormKey.currentState!.validate()) {
-     await addingTripToDb(TripModel(
+      await TripModelFunctions().addingTripToDb(TripModel(
         place: place,
         startDate: startDate!,
         endDate: endDate!,
@@ -444,14 +435,20 @@ class _AddTripState extends State<AddTrip> {
         notes: notes,
         travelMethod: travelMethod,
         images: selectedImages.map((image) => image.path).toList(),
-         
       )).then((value) {
-             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> HomeScreen(tripModelNotifier: tripModelNotifier)),(route) => false,); 
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (ctx) =>
+                  HomeScreen(tripModelNotifier: tripModelNotifier)),
+          (route) => false,
+        );
       });
-      
-
     }
   }
 
-
+  onImageDeleted(int index) {
+    setState(() {
+      selectedImages.removeAt(index);
+    });
+  }
 }

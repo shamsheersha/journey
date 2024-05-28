@@ -1,4 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
+
+import 'check_list_model.dart';
 part 'journey_model.g.dart';
 
 @HiveType(typeId: 1)
@@ -25,7 +27,7 @@ class TripModel extends HiveObject{
   final List<String> images;
 
   @HiveField(7)
-   final Map<String, bool>? checkboxes; 
+    List<CheckList>? checkboxes;
 
   TripModel({
     required this.place,

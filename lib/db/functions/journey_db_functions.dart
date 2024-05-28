@@ -4,26 +4,12 @@ import 'package:journey/db/model/journey_model.dart';
 
 ValueNotifier<List<TripModel>> tripModelNotifier = ValueNotifier([]);
 late int currentTripKey;
-Future<void> addingTripToDb(TripModel value) async {
+class TripModelFunctions extends ChangeNotifier{
+  Future<void> addingTripToDb(TripModel value) async {
   final tripDb = await Hive.openBox<TripModel>('trip_db');
-  final key = await tripDb.add(value);
+ await tripDb.add(value);
   tripModelNotifier.value.add(value);
   tripModelNotifier.notifyListeners();
-
-  await tripDb.close();
-}
-
-Future<void> updateNote(int key, String note) async {
-  final tripDb = await Hive.openBox<TripModel>('trip_db');
-  final tripKeyFromDb = tripDb.get(key);
-
-  
-    tripKeyFromDb!.notes = note;
-    await tripDb.put(key, tripKeyFromDb);
-
-    tripModelNotifier.value = tripDb.values.toList();
-    tripModelNotifier.notifyListeners();
-  
 
   await tripDb.close();
 }
@@ -46,11 +32,23 @@ Future<void> toUpdateTrip(TripModel value, int key) async {
 
 Future<void> deleteTrip(int id) async {
   final tripDb = await Hive.openBox<TripModel>('trip_db');
-  if (tripDb.containsKey(id)) {
     await tripDb.delete(id);
-    tripModelNotifier.value.clear();
-    tripModelNotifier.notifyListeners();
+    await tripDb.close();
     await getAllTrip();
-  }
+}
+
+Future<void> updateNote(int key, String note) async {
+  final tripDb = await Hive.openBox<TripModel>('trip_db');
+  final tripKeyFromDb = tripDb.get(key);
+
+  tripKeyFromDb!.notes = note;
+  await tripDb.put(key, tripKeyFromDb);
+
+  tripModelNotifier.value = tripDb.values.toList();
+  tripModelNotifier.notifyListeners();
+
   await tripDb.close();
 }
+
+}
+

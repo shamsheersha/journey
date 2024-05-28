@@ -171,6 +171,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       ),
       floatingActionButton: isEditing
           ? FloatingActionButton.extended(
+            heroTag: 'expense',
+
               onPressed: () {
                 addingExpenses(context);
               },
@@ -353,7 +355,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         id: currentTripKey,
       );
 
-      await addingExpensesToDb(expensesDetails);
+      await ExpenseFunctions().addingExpensesToDb(expensesDetails);
 
       setState(() {
         totalExpenseAmount += int.parse(amount);
@@ -368,7 +370,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   getAllExpensesSample() async {
     currentTripKey = tripModel.key;
-    await getAllExpenses();
+    await ExpenseFunctions().getAllExpenses();
     await checkingBalance();
   }
 
@@ -428,7 +430,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                           setState(() {
                             isEditing = true;
                           });
-                          await toUpdateExpenses(
+                          await ExpenseFunctions().toUpdateExpenses(
                               Expenses(
                                   id: currentTripKey,
                                   amount: amountController.text,
@@ -571,7 +573,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                   child: const Text('Cancel')),
               TextButton(
                   onPressed: () async {
-                    await deleteExpenses(data.key);
+                    await ExpenseFunctions().deleteExpenses(data.key);
                     await getAllExpensesSample();
                     Navigator.pop(ctx);
                   },

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
 import 'package:journey/db/model/journey_model.dart';
 import 'package:journey/fonts/Fonts.dart';
+import 'package:journey/screens/main_screens/add_trip/delete_image_while_adding.dart';
 
 class EditTrip extends StatefulWidget {
   final TripModel tripModel;
@@ -30,7 +31,7 @@ class _EditTripState extends State<EditTrip> {
   bool isTrainSelected = false;
   bool isCarSelected = false;
 
-  List<XFile> selectedImages = [];
+  List<File> selectedImages = [];
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _EditTripState extends State<EditTrip> {
     } else {
       isTrainSelected = true;
     }
+    selectedImages = tripModel.images.map((path) => File(path)).toList();
   }
 
   @override
@@ -376,6 +378,10 @@ class _EditTripState extends State<EditTrip> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {},
+                          onLongPress: () {
+                            DeleteImage.deleteImageWhileAddingTrip(
+                                context, index, selectedImages, onImageDeleted);
+                          },
                           child: Image.file(
                             File(selectedImages[index].path),
                             fit: BoxFit.cover,
@@ -410,7 +416,7 @@ class _EditTripState extends State<EditTrip> {
 
     if (image.isNotEmpty) {
       setState(() {
-        selectedImages.addAll(image);
+        selectedImages.addAll(image.map((xFile) => File(xFile.path)).toList());
       });
     }
   }
@@ -448,9 +454,15 @@ class _EditTripState extends State<EditTrip> {
       images: selectedImages.map((image) => image.path).toList(),
     );
 
-    await toUpdateTrip(editTripDetails, tripModel.key);
+    await TripModelFunctions().toUpdateTrip(editTripDetails, tripModel.key);
     tripModelNotifier.notifyListeners();
 
     Navigator.of(context).pop();
+  }
+
+  void onImageDeleted(int index) {
+    setState(() {
+      selectedImages.removeAt(index);
+    });
   }
 }

@@ -19,7 +19,7 @@ class _NotesState extends State<Notes> {
   void initState() {
     super.initState();
     tripModel = widget.tripModel;
-    editNoteController.text = tripModel.notes ?? '';
+    editNoteController.text = tripModel.notes ;
   }
 
   @override
@@ -29,7 +29,7 @@ class _NotesState extends State<Notes> {
   }
 
   Future<void> updateNoteAndUI(String note) async {
-    await updateNote(widget.tripModel.key, note);
+    await TripModelFunctions().updateNote(widget.tripModel.key, note);
     setState(() {
       tripModel.notes = note;
     });
@@ -44,7 +44,7 @@ class _NotesState extends State<Notes> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Notes', style: bold),
+            Text('Notes', style: bold2),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:journey/db/model/check_list_model.dart';
 import 'package:journey/db/model/expenses_model.dart';
 import 'package:journey/db/model/journey_model.dart';
 import 'package:journey/screens/splash&onboardScreens/splash_screen.dart';
@@ -18,6 +19,10 @@ Future<void> main() async {
   if(!Hive.isAdapterRegistered(ExpensesAdapter().typeId)){
     Hive.registerAdapter(ExpensesAdapter());
   }  
+
+  if(!Hive.isAdapterRegistered(CheckListAdapter().typeId)){
+    Hive.registerAdapter(CheckListAdapter());
+  }
     
  
   runApp(const MyApp());

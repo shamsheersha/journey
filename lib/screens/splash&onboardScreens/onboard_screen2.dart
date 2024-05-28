@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journey/fonts/fonts.dart';
-import 'package:journey/screens/login_screen.dart';
+import 'package:journey/screens/login_page_&_profile_page/login_screen.dart';
 
 
 class OnBoardPageTwo extends StatelessWidget {

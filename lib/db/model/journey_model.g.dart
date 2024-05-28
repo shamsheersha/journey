@@ -24,7 +24,7 @@ class TripModelAdapter extends TypeAdapter<TripModel> {
       notes: fields[4] as String,
       travelMethod: fields[5] as String,
       images: (fields[6] as List).cast<String>(),
-      checkboxes: (fields[7] as Map?)?.cast<String, bool>(),
+      checkboxes: (fields[7] as List?)?.cast<CheckList>(),
     );
   }
 

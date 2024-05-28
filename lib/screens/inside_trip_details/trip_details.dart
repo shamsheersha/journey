@@ -31,7 +31,7 @@ class _TripDetailsState extends State<TripDetails> {
     super.initState();
 
     tripModel = widget.tripModel;
-    
+
   }
 
   @override
@@ -59,7 +59,7 @@ class _TripDetailsState extends State<TripDetails> {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Container(
-              height: 190,
+              // height: 190,
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(30)),
@@ -149,7 +149,7 @@ class _TripDetailsState extends State<TripDetails> {
             tripModelNotifier: tripModelNotifier,
           ),
            Notes(tripModel: tripModel,),
-          const ChecklistScreen(),
+           ChecklistScreen(tripModel: tripModel,),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

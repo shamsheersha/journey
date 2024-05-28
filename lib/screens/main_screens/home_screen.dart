@@ -5,9 +5,9 @@ import 'package:journey/db/functions/db_functions.dart';
 import 'package:journey/db/functions/journey_db_functions.dart';
 import 'package:journey/db/model/journey_model.dart';
 import 'package:journey/fonts/fonts.dart';
-import 'package:journey/screens/main_screens/add_trip.dart';
+import 'package:journey/screens/main_screens/add_trip/add_trip.dart';
 import 'package:journey/screens/main_screens/edit_page.dart';
-import 'package:journey/screens/profile_page.dart';
+import 'package:journey/screens/login_page_&_profile_page/profile_page.dart';
 import 'package:journey/screens/inside_trip_details/trip_details.dart';
 import 'package:journey/search_Bar/search.dart';
 
@@ -248,25 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               )
 
-                              // IconButton(
-                              //   onPressed: () {
-                              //     Navigator.of(context)
-                              //         .push(MaterialPageRoute(
-                              //             builder: (ctx) =>
-                              //                 EditTrip(tripModel: data)))
-                              //         .then((value) {
-                              //       filterTrips();
-                              //       setState(() {});
-                              //     });
-                              //   },
-                              //   icon: const Icon(Icons.edit),
-                              // ),
-                              // IconButton(
-                              //   onPressed: () {
-                              //     deletingTrip(context, dataKey);
-                              //   },
-                              //   icon: const Icon(Icons.delete),
-                              // ),
+                              
                             ],
                           ),
                         ),
@@ -296,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
-                await deleteTrip(id).then((value) {
+                await TripModelFunctions().deleteTrip(id).then((value) {
                   Navigator.pop(ctx);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
